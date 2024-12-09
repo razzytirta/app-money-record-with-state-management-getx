@@ -25,20 +25,18 @@ class _RegisterPageState extends State<RegisterPage> {
         isLoading = true; // Show loading indicator
       });
 
-      await UserSource.register(
-        nameC.text,
-        emailC.text, passwordC.text
-      );
+      await UserSource.register(nameC.text, emailC.text, passwordC.text);
 
       setState(() {
         isLoading = false; // Hide loading indicator after the request
       });
     }
   }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: LayoutBuilder(builder: (context, constraints) {
+    return Scaffold(body: LayoutBuilder(
+      builder: (context, constraints) {
         return SingleChildScrollView(
           child: ConstrainedBox(
             constraints: BoxConstraints(
@@ -58,9 +56,12 @@ class _RegisterPageState extends State<RegisterPage> {
                         DView.height(40),
                         TextFormField(
                           controller: nameC,
-                          validator: (value) => value == '' ? 'name is required' : null,
+                          validator: (value) =>
+                              value == '' ? 'name is required' : null,
                           autovalidateMode: AutovalidateMode.onUserInteraction,
-                          style: const TextStyle(color: Colors.white,),
+                          style: const TextStyle(
+                            color: Colors.white,
+                          ),
                           decoration: InputDecoration(
                             fillColor: AppColor.primary.withOpacity(0.5),
                             filled: true,
@@ -69,17 +70,23 @@ class _RegisterPageState extends State<RegisterPage> {
                               borderSide: BorderSide.none,
                             ),
                             hintText: "Name",
-                            hintStyle: const TextStyle(color: Colors.white,),
+                            hintStyle: const TextStyle(
+                              color: Colors.white,
+                            ),
                             isDense: true,
-                            contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                            contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 16),
                           ),
                         ),
                         DView.height(),
                         TextFormField(
                           controller: emailC,
-                          validator: (value) => value == '' ? 'email is required' : null,
+                          validator: (value) =>
+                              value == '' ? 'email is required' : null,
                           autovalidateMode: AutovalidateMode.onUserInteraction,
-                          style: const TextStyle(color: Colors.white,),
+                          style: const TextStyle(
+                            color: Colors.white,
+                          ),
                           decoration: InputDecoration(
                             fillColor: AppColor.primary.withOpacity(0.5),
                             filled: true,
@@ -88,18 +95,24 @@ class _RegisterPageState extends State<RegisterPage> {
                               borderSide: BorderSide.none,
                             ),
                             hintText: "Email",
-                            hintStyle: const TextStyle(color: Colors.white,),
+                            hintStyle: const TextStyle(
+                              color: Colors.white,
+                            ),
                             isDense: true,
-                            contentPadding:const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                            contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 16),
                           ),
                         ),
                         DView.height(),
                         TextFormField(
                           controller: passwordC,
-                          validator: (value) => value == '' ? 'password is required' : null,
+                          validator: (value) =>
+                              value == '' ? 'password is required' : null,
                           autovalidateMode: AutovalidateMode.onUserInteraction,
                           obscureText: true,
-                          style: const TextStyle(color: Colors.white,),
+                          style: const TextStyle(
+                            color: Colors.white,
+                          ),
                           decoration: InputDecoration(
                             fillColor: AppColor.primary.withOpacity(0.5),
                             filled: true,
@@ -108,30 +121,36 @@ class _RegisterPageState extends State<RegisterPage> {
                               borderSide: BorderSide.none,
                             ),
                             hintText: "Password",
-                            hintStyle: const TextStyle(color: Colors.white,),
+                            hintStyle: const TextStyle(
+                              color: Colors.white,
+                            ),
                             isDense: true,
-                            contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                            contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 16),
                           ),
                         ),
                         DView.height(30),
-                        isLoading ? CircularProgressIndicator() :
-                        Material(
-                          color: AppColor.primary,
-                          borderRadius: BorderRadius.circular(30),
-                          child: InkWell(
-                            onTap: () => register(),
-                            borderRadius: BorderRadius.circular(30),
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 40, vertical: 16),
-                              child: Text("REGISTER", 
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
+                        isLoading
+                            ? const CircularProgressIndicator()
+                            : Material(
+                                color: AppColor.primary,
+                                borderRadius: BorderRadius.circular(30),
+                                child: InkWell(
+                                  onTap: () => register(),
+                                  borderRadius: BorderRadius.circular(30),
+                                  child: const Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 40, vertical: 16),
+                                    child: Text(
+                                      "REGISTER",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                  ),
                                 ),
                               ),
-                            ),
-                          ),
-                        ),
                       ],
                     ),
                   ),
@@ -142,20 +161,21 @@ class _RegisterPageState extends State<RegisterPage> {
                     onTap: () {
                       Get.back();
                     },
-                    child: Row(
+                    child: const Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text('Sudah punya akun? ',
+                        Text(
+                          'Sudah punya akun? ',
                           style: TextStyle(
                             fontSize: 16,
                           ),
                         ),
-                        Text('Login', 
-                          style: TextStyle(
-                            color: AppColor.primary,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16
-                          ),
+                        Text(
+                          'Login',
+                          style: const TextStyle(
+                              color: AppColor.primary,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16),
                         ),
                       ],
                     ),
@@ -165,7 +185,7 @@ class _RegisterPageState extends State<RegisterPage> {
             ),
           ),
         );
-      },)
-    );
+      },
+    ));
   }
 }

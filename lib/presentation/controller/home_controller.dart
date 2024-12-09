@@ -50,14 +50,11 @@ class HomeController extends GetxController {
 
     _today.value = data['today'].toDouble();
     double yesterday = data['yesterday'].toDouble();
-
-    // Calculate percentage difference
     double different = (today - yesterday).abs();
-    bool isSame = today == yesterday; // Use '==' for comparison
-    bool isPlus = today > yesterday; // Use '>' for comparison
-    double byYesterday = yesterday == 0 ? 1 : yesterday;
-    double percent = (different / byYesterday) * 100;
-
+    bool isSame = today.isEqual(yesterday); // Use '==' for comparison
+    bool isPlus = today.isGreaterThan(yesterday); // Use '>' for comparison
+    double dividerToday = (today + yesterday) == 0 ? 1 : (today + yesterday);
+    double percent = (different / dividerToday) * 100;
     _todayPercent.value = isSame
         ? '100% sama dengan kemaren'
         : isPlus
@@ -69,16 +66,18 @@ class HomeController extends GetxController {
     _monthIncome.value = data['month']['income'].toDouble();
     _monthOutcome.value = data['month']['outcome'].toDouble();
     _differentMonth.value = (monthIncome - monthOutcome).abs();
-    bool isSameMonth = monthIncome == monthOutcome; // Use '==' for comparison
-    bool isPlusMonth = monthIncome > monthOutcome; // Use '>' for comparison
-    double byOutcome = monthOutcome == 0 ? 1 : monthOutcome;
-    double percentMonth = (differentMonth / byOutcome) * 100;
-    _percentIncome.value =
-        ((differentMonth / byOutcome) * 100).toStringAsFixed(1);
+    bool isSameMonth =
+        monthIncome.isEqual(monthOutcome); // Use '==' for comparison
+    bool isPlusMonth =
+        monthIncome.isGreaterThan(monthOutcome); // Use '>' for comparison
+    double dividerMonth =
+        (monthIncome + monthOutcome) == 0 ? 1 : (monthIncome + monthOutcome);
+    double percentMonth = (differentMonth / dividerMonth) * 100;
+    _percentIncome.value = percentMonth.toStringAsFixed(1);
     _monthPercent.value = isSameMonth
         ? 'Pemasukan\n100% sama\ndengan Pengeluaran'
         : isPlusMonth
-            ? 'Pemasukan\nlebih besar ${percentMonth.toStringAsFixed(1)}%\n Pengeluaran'
-            : 'Pemasukan\nlebih kecil ${percentMonth.toStringAsFixed(1)}%\n Pengeluaran';
+            ? 'Pemasukan\nlebih besar $percentIncome%\n Pengeluaran'
+            : 'Pemasukan\nlebih kecil $percentIncome%\n Pengeluaran';
   }
 }

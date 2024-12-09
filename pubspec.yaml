@@ -33,11 +33,12 @@ dependencies:
   d_info: ^0.0.7
   d_method: ^0.0.2
   d_view: ^0.0.3
+  d_input: ^0.0.2
   flutter:
     sdk: flutter
   get: ^4.6.6
   http: ^1.2.2
-  intl: ^0.20.1
+  intl: ^0.18.0
   shared_preferences: ^2.3.3
 
 dev_dependencies:

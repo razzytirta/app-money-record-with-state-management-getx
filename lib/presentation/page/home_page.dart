@@ -5,11 +5,12 @@ import 'package:app_money_record/config/session.dart';
 import 'package:app_money_record/presentation/controller/home_controller.dart';
 import 'package:app_money_record/presentation/controller/user_controller.dart';
 import 'package:app_money_record/presentation/page/auth/login_page.dart';
+import 'package:app_money_record/presentation/page/history/add_history_page.dart';
+import 'package:app_money_record/presentation/page/history/income_outcome_page.dart';
 import 'package:d_view/d_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:d_chart/d_chart.dart';
-import 'package:intl/intl.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -32,139 +33,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        endDrawer: Drawer(
-          child: ListView(
-            children: [
-              DrawerHeader(
-                margin: EdgeInsets.only(bottom: 0),
-                padding: EdgeInsets.fromLTRB(20, 16, 16, 20),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Image.asset(AppAsset.profile),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Obx(() {
-                                return Text(
-                                  userC.data.name!,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20,
-                                  ),
-                                );
-                              }),
-                              Obx(() {
-                                return Text(
-                                  userC.data.email!,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w300,
-                                    fontSize: 16,
-                                  ),
-                                );
-                              }),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    Material(
-                      color: AppColor.primary,
-                      borderRadius: BorderRadius.circular(30),
-                      child: InkWell(
-                        onTap: () {
-                          Session.delete();
-                          Get.off(
-                            () => LoginPage(),
-                          );
-                        },
-                        borderRadius: BorderRadius.circular(30),
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 24,
-                            vertical: 8,
-                          ),
-                          child: Text(
-                            'Logout',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                            ),
-                          ),
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              ListTile(
-                onTap: () {},
-                leading: Icon(
-                  Icons.add,
-                  color: Colors.blue,
-                ),
-                horizontalTitleGap: 8.0, // Atur jarak antara ikon dan judul
-                contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 16.0), // Atur padding konten
-                title: Text('Tambah baru'),
-                trailing: Icon(Icons.navigate_next),
-              ),
-              Divider(
-                height: 1,
-              ),
-              ListTile(
-                onTap: () {},
-                leading: Icon(
-                  Icons.south_west,
-                  color: Colors.green,
-                ),
-                horizontalTitleGap: 8.0, // Atur jarak antara ikon dan judul
-                contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 16.0), // Atur padding konten
-                title: Text('Pemasukan'),
-                trailing: Icon(Icons.navigate_next),
-              ),
-              Divider(
-                height: 1,
-              ),
-              ListTile(
-                onTap: () {},
-                leading: Icon(
-                  Icons.north_west,
-                  color: Colors.red,
-                ),
-                horizontalTitleGap: 8.0, // Atur jarak antara ikon dan judul
-                contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 16.0), // Atur padding konten
-                title: Text('Pengeluaran'),
-                trailing: Icon(Icons.navigate_next),
-              ),
-              Divider(
-                height: 1,
-              ),
-              ListTile(
-                onTap: () {},
-                leading: Icon(
-                  Icons.history,
-                  color: Colors.grey,
-                ),
-                horizontalTitleGap: 8.0, // Atur jarak antara ikon dan judul
-                contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 16.0), // Atur padding konten
-                title: Text('Riwayat'),
-                trailing: Icon(Icons.navigate_next),
-              ),
-              Divider(
-                height: 1,
-              ),
-            ],
-          ),
-        ),
+        endDrawer: drawer(),
         body: Column(
           children: [
             Padding(
@@ -176,7 +45,7 @@ class _HomePageState extends State<HomePage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
+                        const Text(
                           'Hi,',
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 20),
@@ -184,7 +53,7 @@ class _HomePageState extends State<HomePage> {
                         Obx(() {
                           return Text(
                             userC.data.name!,
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 20),
                           );
                         })
@@ -199,8 +68,8 @@ class _HomePageState extends State<HomePage> {
                         onTap: () {
                           Scaffold.of(context).openEndDrawer();
                         },
-                        child: Padding(
-                          padding: const EdgeInsets.all(16),
+                        child: const Padding(
+                          padding: EdgeInsets.all(16),
                           child: Icon(
                             Icons.menu,
                             color: AppColor.primary,
@@ -213,54 +82,211 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             Expanded(
-              child: ListView(
-                padding: EdgeInsets.fromLTRB(20, 0, 20, 30),
-                children: [
-                  Text(
-                    "Pengeluaran Hari Ini",
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleLarge!
-                        .copyWith(fontWeight: FontWeight.bold),
-                  ),
-                  DView.height(),
-                  cardToday(context),
-                  DView.height(30),
-                  Center(
-                    child: Container(
-                      height: 5,
-                      width: 80,
-                      decoration: BoxDecoration(
-                        color: AppColor.background,
-                        borderRadius: BorderRadius.circular(30),
+              child: RefreshIndicator(
+                onRefresh: () async {
+                  homeC.getAnalysis(userC.data.id!);
+                },
+                child: ListView(
+                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 30),
+                  children: [
+                    Text(
+                      "Pengeluaran Hari Ini",
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleLarge!
+                          .copyWith(fontWeight: FontWeight.bold),
+                    ),
+                    DView.height(),
+                    cardToday(context),
+                    DView.height(30),
+                    Center(
+                      child: Container(
+                        height: 5,
+                        width: 80,
+                        decoration: BoxDecoration(
+                          color: AppColor.background,
+                          borderRadius: BorderRadius.circular(30),
+                        ),
                       ),
                     ),
-                  ),
-                  DView.height(30),
-                  Text(
-                    "Pengeluaran Minggu Ini",
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleLarge!
-                        .copyWith(fontWeight: FontWeight.bold),
-                  ),
-                  DView.height(),
-                  weekly(),
-                  DView.height(30),
-                  Text(
-                    "Perbandingan Bulan Ini",
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleLarge!
-                        .copyWith(fontWeight: FontWeight.bold),
-                  ),
-                  DView.height(),
-                  monthly(context)
-                ],
+                    DView.height(30),
+                    Text(
+                      "Pengeluaran Minggu Ini",
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleLarge!
+                          .copyWith(fontWeight: FontWeight.bold),
+                    ),
+                    DView.height(),
+                    weekly(),
+                    DView.height(30),
+                    Text(
+                      "Perbandingan Bulan Ini",
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleLarge!
+                          .copyWith(fontWeight: FontWeight.bold),
+                    ),
+                    DView.height(),
+                    monthly(context)
+                  ],
+                ),
               ),
             ),
           ],
         ));
+  }
+
+  Drawer drawer() {
+    return Drawer(
+      child: ListView(
+        children: [
+          DrawerHeader(
+            margin: const EdgeInsets.only(bottom: 0),
+            padding: const EdgeInsets.fromLTRB(20, 16, 16, 20),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Image.asset(AppAsset.profile),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Obx(() {
+                            return Text(
+                              userC.data.name!,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
+                              ),
+                            );
+                          }),
+                          Obx(() {
+                            return Text(
+                              userC.data.email!,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w300,
+                                fontSize: 16,
+                              ),
+                            );
+                          }),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                Material(
+                  color: AppColor.primary,
+                  borderRadius: BorderRadius.circular(30),
+                  child: InkWell(
+                    onTap: () {
+                      Session.delete();
+                      Get.off(
+                        () => const LoginPage(),
+                      );
+                    },
+                    borderRadius: BorderRadius.circular(30),
+                    child: const Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 24,
+                        vertical: 8,
+                      ),
+                      child: Text(
+                        'Logout',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+          ListTile(
+            onTap: () {
+              Get.to(() => AddHistoryPage())?.then(
+                (value) {
+                  if (value ?? false) {
+                    homeC.getAnalysis(userC.data.id!);
+                  }
+                },
+              );
+            },
+            leading: const Icon(
+              Icons.add,
+              color: Colors.blue,
+            ),
+            horizontalTitleGap: 8.0, // Atur jarak antara ikon dan judul
+            contentPadding: const EdgeInsets.symmetric(
+                horizontal: 16.0), // Atur padding konten
+            title: const Text('Tambah baru'),
+            trailing: const Icon(Icons.navigate_next),
+          ),
+          const Divider(
+            height: 1,
+          ),
+          ListTile(
+            onTap: () {
+              Get.to(() => const IncomeOutcomePage(
+                    type: 'Pemasukan',
+                  ));
+            },
+            leading: const Icon(
+              Icons.south_west,
+              color: Colors.green,
+            ),
+            horizontalTitleGap: 8.0, // Atur jarak antara ikon dan judul
+            contentPadding: const EdgeInsets.symmetric(
+                horizontal: 16.0), // Atur padding konten
+            title: const Text('Pemasukan'),
+            trailing: const Icon(Icons.navigate_next),
+          ),
+          const Divider(
+            height: 1,
+          ),
+          ListTile(
+            onTap: () {
+              Get.to(() => const IncomeOutcomePage(
+                    type: 'Pengeluaran',
+                  ));
+            },
+            leading: const Icon(
+              Icons.north_west,
+              color: Colors.red,
+            ),
+            horizontalTitleGap: 8.0, // Atur jarak antara ikon dan judul
+            contentPadding: const EdgeInsets.symmetric(
+                horizontal: 16.0), // Atur padding konten
+            title: const Text('Pengeluaran'),
+            trailing: const Icon(Icons.navigate_next),
+          ),
+          const Divider(
+            height: 1,
+          ),
+          ListTile(
+            onTap: () {},
+            leading: const Icon(
+              Icons.history,
+              color: Colors.grey,
+            ),
+            horizontalTitleGap: 8.0, // Atur jarak antara ikon dan judul
+            contentPadding: const EdgeInsets.symmetric(
+                horizontal: 16.0), // Atur padding konten
+            title: const Text('Riwayat'),
+            trailing: const Icon(Icons.navigate_next),
+          ),
+          const Divider(
+            height: 1,
+          ),
+        ],
+      ),
+    );
   }
 
   Row monthly(BuildContext context) {
@@ -305,7 +331,7 @@ class _HomePageState extends State<HomePage> {
                 child: Obx(() {
                   return Text(
                     '${homeC.percentIncome}%',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 36,
                       color: Colors.black87,
@@ -327,7 +353,7 @@ class _HomePageState extends State<HomePage> {
                   color: AppColor.primary,
                 ),
                 DView.width(8),
-                Text('Pemasukan'),
+                const Text('Pemasukan'),
               ],
             ),
             DView.height(8),
@@ -339,19 +365,19 @@ class _HomePageState extends State<HomePage> {
                   color: AppColor.chart,
                 ),
                 DView.width(8),
-                Text('Pengeluaran'),
+                const Text('Pengeluaran'),
               ],
             ),
             DView.height(20),
             Obx(() {
-              return Text('${homeC.monthPercent}');
+              return Text(homeC.monthPercent);
             }),
             DView.height(10),
-            Text('Atau setara:'),
+            const Text('Atau setara:'),
             Obx(() {
               return Text(
                 AppFormat.currency(homeC.differentMonth.toString()),
-                style: TextStyle(
+                style: const TextStyle(
                   color: AppColor.primary,
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -382,8 +408,8 @@ class _HomePageState extends State<HomePage> {
       aspectRatio: 16 / 9,
       child: Obx(() {
         return DChartBarO(
-          layoutMargin: LayoutMargin(20, 10, 10, 10),
-          configRenderBar: ConfigRenderBar(
+          layoutMargin: LayoutMargin(40, 10, 10, 10),
+          configRenderBar: const ConfigRenderBar(
             barGroupingType: BarGroupingType.stacked,
             stackedBarPaddingPx: 4,
             maxBarWidthPx: 20,
@@ -417,7 +443,7 @@ class _HomePageState extends State<HomePage> {
                 7,
                 (index) {
                   return OrdinalData(
-                      domain: '${homeC.weekText()[index]}',
+                      domain: homeC.weekText()[index],
                       measure: homeC.week[index]);
                 },
               ),
@@ -454,16 +480,15 @@ class _HomePageState extends State<HomePage> {
             child: Obx(() {
               return Text(
                 homeC.todayPercent,
-                style: TextStyle(
-                    color: const Color.fromARGB(255, 201, 191, 241),
-                    fontSize: 16),
+                style: const TextStyle(
+                    color: Color.fromARGB(255, 201, 191, 241), fontSize: 16),
               );
             }),
           ),
           Container(
-            margin: EdgeInsets.fromLTRB(16, 0, 0, 16),
-            padding: EdgeInsets.symmetric(vertical: 7),
-            decoration: BoxDecoration(
+            margin: const EdgeInsets.fromLTRB(16, 0, 0, 16),
+            padding: const EdgeInsets.symmetric(vertical: 7),
+            decoration: const BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(8),
@@ -472,14 +497,14 @@ class _HomePageState extends State<HomePage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Text(
+                const Text(
                   "Selengkapnya",
                   style: TextStyle(
                     color: AppColor.primary,
                     fontSize: 16,
                   ),
                 ),
-                Icon(Icons.navigate_next),
+                const Icon(Icons.navigate_next),
                 DView.height()
               ],
             ),
