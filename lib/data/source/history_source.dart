@@ -87,6 +87,74 @@ class HistorySource {
     }
   }
 
+  static Future<bool> update(String id, String userId, String date, String type,
+      String details, String total) async {
+    try {
+      String url = '${Api.history}/update.php';
+      var response = await AppRequest.post(url, {
+        'id': id,
+        'user_id': userId,
+        'date': date,
+        'type': type,
+        'details': details,
+        'total': total,
+        'updated_at': DateTime.now().toIso8601String()
+      });
+
+      if (response == null || response is! Map) {
+        print('Invalid response from server: $response');
+        DInfo.dialogError('No response from server. Please try again.');
+        DInfo.closeDialog();
+        return false;
+      }
+
+      if (response['success'] == true) {
+        DInfo.dialogSuccess('History Updated');
+        DInfo.closeDialog();
+
+        return true;
+      } else {
+        if (response['message'] == 'date') {
+          DInfo.dialogError('History is already taken');
+        } else {
+          DInfo.dialogError('History addition failed. Please try again.');
+        }
+        DInfo.closeDialog();
+        return false;
+      }
+    } catch (e) {
+      print("Error during history request: $e");
+      DInfo.dialogError(
+          'An error occurred while registering. Please try again.');
+      DInfo.closeDialog();
+      return false;
+    }
+  }
+
+  static Future<bool> delete(String id) async {
+    try {
+      String url = '${Api.history}/delete.php';
+      var response = await AppRequest.post(url, {
+        'id': id,
+      });
+
+      if (response == null) {
+        print('Invalid response from server: $response');
+        DInfo.dialogError('No response from server. Please try again.');
+        DInfo.closeDialog();
+        return false;
+      }
+
+      return response['success'];
+    } catch (e) {
+      print("Error during history request: $e");
+      DInfo.dialogError(
+          'An error occurred while registering. Please try again.');
+      DInfo.closeDialog();
+      return false;
+    }
+  }
+
   static Future<List<History>> incomeOutcome(String userId, String type) async {
     final String url = '${Api.history}/income_outcome.php';
 
@@ -152,6 +220,104 @@ class HistorySource {
       print("Exception in incomeOutcome: $e");
       print(stackTrace);
       return [];
+    }
+  }
+
+  static Future<List<History>> history(String userId) async {
+    final String url = '${Api.history}/history.php';
+
+    try {
+      // Send POST request
+      final response = await AppRequest.post(url, {
+        'user_id': userId,
+      });
+
+      // Handle null or invalid responses
+      if (response == null) {
+        print("Error: No response from the server.");
+        return [];
+      }
+
+      // Check success and parse data
+      if (response['success'] == true) {
+        final List<dynamic> data = response['data'] ?? [];
+        return data.map((e) => History.fromJson(e)).toList();
+      }
+
+      // Log server error or unsuccessful status
+      print("Error: ${response['message'] ?? 'Unknown server error.'}");
+      return [];
+    } catch (e, stackTrace) {
+      // Log the exception with stack trace for debugging
+      print("Exception in incomeOutcome: $e");
+      print(stackTrace);
+      return [];
+    }
+  }
+
+  static Future<List<History>> historySearch(String userId, String date) async {
+    final String url = '${Api.history}/history_search.php';
+
+    try {
+      // Send POST request
+      final response = await AppRequest.post(url, {
+        'user_id': userId,
+        'date': date,
+      });
+
+      // Handle null or invalid responses
+      if (response == null) {
+        print("Error: No response from the server.");
+        return [];
+      }
+
+      // Check success and parse data
+      if (response['success'] == true) {
+        final List<dynamic> data = response['data'] ?? [];
+        return data.map((e) => History.fromJson(e)).toList();
+      }
+
+      // Log server error or unsuccessful status
+      print("Error: ${response['message'] ?? 'Empty.'}");
+      return [];
+    } catch (e, stackTrace) {
+      // Log the exception with stack trace for debugging
+      print("Exception in incomeOutcome: $e");
+      print(stackTrace);
+      return [];
+    }
+  }
+
+  static Future<History?> whereDate(String userId, String date) async {
+    final String url = '${Api.history}/where_date.php';
+
+    try {
+      // Send POST request
+      final response = await AppRequest.post(url, {
+        'user_id': userId,
+        'date': date,
+      });
+
+      // Handle null or invalid responses
+      if (response == null) {
+        print("Error: No response from the server.");
+        return null;
+      }
+
+      // Check success and parse data
+      if (response['success'] == true) {
+        var data = response['data'] ?? [];
+        return History.fromJson(data);
+      }
+
+      // Log server error or unsuccessful status
+      print("Error: ${response['message'] ?? 'Empty.'}");
+      return null;
+    } catch (e, stackTrace) {
+      // Log the exception with stack trace for debugging
+      print("Exception in Update data: $e");
+      print(stackTrace);
+      return null;
     }
   }
 }

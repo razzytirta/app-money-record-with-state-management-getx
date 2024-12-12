@@ -3,6 +3,4 @@ class Api {
 
   static const history = '$baseUrl/history';
   static const user = '$baseUrl/user';
-
-
 }

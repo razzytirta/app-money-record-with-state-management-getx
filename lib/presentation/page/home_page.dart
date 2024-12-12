@@ -6,6 +6,7 @@ import 'package:app_money_record/presentation/controller/home_controller.dart';
 import 'package:app_money_record/presentation/controller/user_controller.dart';
 import 'package:app_money_record/presentation/page/auth/login_page.dart';
 import 'package:app_money_record/presentation/page/history/add_history_page.dart';
+import 'package:app_money_record/presentation/page/history/history_page.dart';
 import 'package:app_money_record/presentation/page/history/income_outcome_page.dart';
 import 'package:d_view/d_view.dart';
 import 'package:flutter/material.dart';
@@ -270,7 +271,9 @@ class _HomePageState extends State<HomePage> {
             height: 1,
           ),
           ListTile(
-            onTap: () {},
+            onTap: () {
+              Get.to(() => const HistoryPage());
+            },
             leading: const Icon(
               Icons.history,
               color: Colors.grey,
