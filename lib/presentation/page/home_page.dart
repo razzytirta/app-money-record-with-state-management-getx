@@ -494,6 +494,7 @@ class _HomePageState extends State<HomePage> {
             onTap: () => Get.to(() => DetailHistoryPage(
                   date: DateFormat('yyyy-MM-dd').format(DateTime.now()),
                   userId: userC.data.id!,
+                  type: 'Pengeluaran',
                 )),
             child: Container(
               margin: const EdgeInsets.fromLTRB(16, 0, 0, 16),

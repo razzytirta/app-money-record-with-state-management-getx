@@ -146,6 +146,7 @@ class _IncomeOutcomePageState extends State<IncomeOutcomePage> {
                         () => DetailHistoryPage(
                           date: history.date,
                           userId: userC.data.id,
+                          type: history.type,
                         ),
                       );
                     },

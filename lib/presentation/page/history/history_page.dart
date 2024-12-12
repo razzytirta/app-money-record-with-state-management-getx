@@ -132,6 +132,7 @@ class _HistoryPageState extends State<HistoryPage> {
                         () => DetailHistoryPage(
                           date: history.date,
                           userId: userC.data.id,
+                          type: history.type,
                         ),
                       );
                     },

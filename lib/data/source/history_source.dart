@@ -320,4 +320,39 @@ class HistorySource {
       return null;
     }
   }
+
+  static Future<History?> detail(
+      String userId, String date, String type) async {
+    final String url = '${Api.history}/detail.php';
+
+    try {
+      // Send POST request
+      final response = await AppRequest.post(url, {
+        'user_id': userId,
+        'date': date,
+        'type': type,
+      });
+
+      // Handle null or invalid responses
+      if (response == null) {
+        print("Error: No response from the server.");
+        return null;
+      }
+
+      // Check success and parse data
+      if (response['success'] == true) {
+        var data = response['data'] ?? [];
+        return History.fromJson(data);
+      }
+
+      // Log server error or unsuccessful status
+      print("Error: ${response['message'] ?? 'Empty.'}");
+      return null;
+    } catch (e, stackTrace) {
+      // Log the exception with stack trace for debugging
+      print("Exception in Update data: $e");
+      print(stackTrace);
+      return null;
+    }
+  }
 }

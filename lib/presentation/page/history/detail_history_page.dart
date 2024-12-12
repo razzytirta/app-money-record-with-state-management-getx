@@ -7,11 +7,13 @@ import 'package:app_money_record/presentation/controller/user_controller.dart';
 import 'package:d_view/d_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class DetailHistoryPage extends StatefulWidget {
-  const DetailHistoryPage({super.key, this.userId, this.date});
+  const DetailHistoryPage({super.key, this.userId, this.date, this.type});
   final String? userId;
   final String? date;
+  final String? type;
 
   @override
   State<DetailHistoryPage> createState() => _DetailHistoryPageState();
@@ -22,10 +24,7 @@ class _DetailHistoryPageState extends State<DetailHistoryPage> {
 
   @override
   void initState() {
-    detailHistoryC.getData(
-      widget.userId,
-      widget.date,
-    );
+    detailHistoryC.getData(widget.userId, widget.date, widget.type);
     super.initState();
   }
 
@@ -58,7 +57,14 @@ class _DetailHistoryPageState extends State<DetailHistoryPage> {
         }),
       ),
       body: GetBuilder<DetailHistoryController>(builder: (_) {
-        if (_.data.date == null) return DView.nothing();
+        if (_.data.date == null) {
+          String today = DateFormat('yyyy-MM-dd').format(DateTime.now());
+          if (widget.date == today && widget.type == 'Pengeluaran') {
+            return DView.empty('Belum ada Pengeluaran');
+          }
+          return DView.nothing();
+        }
+        ;
         List details = jsonDecode(_.data.details!);
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
