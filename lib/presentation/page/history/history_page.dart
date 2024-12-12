@@ -3,9 +3,8 @@ import 'package:app_money_record/config/app_format.dart';
 import 'package:app_money_record/data/model/history.dart';
 import 'package:app_money_record/data/source/history_source.dart';
 import 'package:app_money_record/presentation/controller/history/history_controller.dart';
-import 'package:app_money_record/presentation/controller/history/income_outcome_controller.dart';
 import 'package:app_money_record/presentation/controller/user_controller.dart';
-import 'package:app_money_record/presentation/page/history/update_history_page.dart';
+import 'package:app_money_record/presentation/page/history/detail_history_page.dart';
 import 'package:d_info/d_info.dart';
 import 'package:flutter/material.dart';
 import 'package:d_view/d_view.dart';
@@ -54,7 +53,7 @@ class _HistoryPageState extends State<HistoryPage> {
           titleSpacing: 0,
           title: Row(
             children: [
-              Text('Riwayat'),
+              const Text('Riwayat'),
               Expanded(
                 child: Container(
                   height: 40,
@@ -127,45 +126,56 @@ class _HistoryPageState extends State<HistoryPage> {
                     16,
                     index == _.data.length - 1 ? 16 : 8,
                   ),
-                  child: Row(
-                    children: [
-                      DView.width(),
-                      history.type == 'Pemasukan'
-                          ? Icon(
-                              Icons.south_west,
-                              color: Colors.green,
-                            )
-                          : Icon(
-                              Icons.north_east,
-                              color: Colors.red,
-                            ),
-                      DView.width(),
-                      Text(
-                        AppFormat.date(history.date!),
-                        style: const TextStyle(
-                          color: AppColor.primary,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
+                  child: InkWell(
+                    onTap: () {
+                      Get.to(
+                        () => DetailHistoryPage(
+                          date: history.date,
+                          userId: userC.data.id,
                         ),
-                      ),
-                      Expanded(
-                        child: Text(
-                          AppFormat.currency(history.total!),
+                      );
+                    },
+                    borderRadius: BorderRadius.circular(4),
+                    child: Row(
+                      children: [
+                        DView.width(),
+                        history.type == 'Pemasukan'
+                            ? const Icon(
+                                Icons.south_west,
+                                color: Colors.green,
+                              )
+                            : const Icon(
+                                Icons.north_east,
+                                color: Colors.red,
+                              ),
+                        DView.width(),
+                        Text(
+                          AppFormat.date(history.date!),
                           style: const TextStyle(
                             color: AppColor.primary,
                             fontWeight: FontWeight.bold,
                             fontSize: 16,
                           ),
-                          textAlign: TextAlign.end,
                         ),
-                      ),
-                      IconButton(
-                          onPressed: () => delete(history.id!),
-                          icon: Icon(
-                            Icons.delete_forever,
-                            color: Colors.red,
-                          ))
-                    ],
+                        Expanded(
+                          child: Text(
+                            AppFormat.currency(history.total!),
+                            style: const TextStyle(
+                              color: AppColor.primary,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                            textAlign: TextAlign.end,
+                          ),
+                        ),
+                        IconButton(
+                            onPressed: () => delete(history.id!),
+                            icon: const Icon(
+                              Icons.delete_forever,
+                              color: Colors.red,
+                            ))
+                      ],
+                    ),
                   ),
                 );
               },

@@ -4,6 +4,7 @@ import 'package:app_money_record/data/model/history.dart';
 import 'package:app_money_record/data/source/history_source.dart';
 import 'package:app_money_record/presentation/controller/history/income_outcome_controller.dart';
 import 'package:app_money_record/presentation/controller/user_controller.dart';
+import 'package:app_money_record/presentation/page/history/detail_history_page.dart';
 import 'package:app_money_record/presentation/page/history/update_history_page.dart';
 import 'package:d_info/d_info.dart';
 import 'package:flutter/material.dart';
@@ -139,46 +140,57 @@ class _IncomeOutcomePageState extends State<IncomeOutcomePage> {
                     16,
                     index == _.data.length - 1 ? 16 : 8,
                   ),
-                  child: Row(
-                    children: [
-                      DView.width(),
-                      Text(
-                        AppFormat.date(history.date!),
-                        style: const TextStyle(
-                          color: AppColor.primary,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
+                  child: InkWell(
+                    onTap: () {
+                      Get.to(
+                        () => DetailHistoryPage(
+                          date: history.date,
+                          userId: userC.data.id,
                         ),
-                      ),
-                      Expanded(
-                        child: Text(
-                          AppFormat.currency(history.total!),
+                      );
+                    },
+                    borderRadius: BorderRadius.circular(4),
+                    child: Row(
+                      children: [
+                        DView.width(),
+                        Text(
+                          AppFormat.date(history.date!),
                           style: const TextStyle(
                             color: AppColor.primary,
                             fontWeight: FontWeight.bold,
                             fontSize: 16,
                           ),
-                          textAlign: TextAlign.end,
                         ),
-                      ),
-                      PopupMenuButton<String>(
-                        itemBuilder: (context) => [
-                          PopupMenuItem(
-                            child: Text(
-                              'Update',
+                        Expanded(
+                          child: Text(
+                            AppFormat.currency(history.total!),
+                            style: const TextStyle(
+                              color: AppColor.primary,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
                             ),
-                            value: 'update',
+                            textAlign: TextAlign.end,
                           ),
-                          PopupMenuItem(
-                            child: Text(
-                              'Delete',
+                        ),
+                        PopupMenuButton<String>(
+                          itemBuilder: (context) => [
+                            PopupMenuItem(
+                              child: Text(
+                                'Update',
+                              ),
+                              value: 'update',
                             ),
-                            value: 'delete',
-                          ),
-                        ],
-                        onSelected: (value) => menuOption(value, history),
-                      )
-                    ],
+                            PopupMenuItem(
+                              child: Text(
+                                'Delete',
+                              ),
+                              value: 'delete',
+                            ),
+                          ],
+                          onSelected: (value) => menuOption(value, history),
+                        )
+                      ],
+                    ),
                   ),
                 );
               },

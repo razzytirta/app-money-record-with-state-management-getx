@@ -8,7 +8,6 @@ import 'package:app_money_record/presentation/controller/user_controller.dart';
 import 'package:d_view/d_view.dart';
 import 'package:flutter/material.dart';
 import 'package:d_input/d_input.dart';
-import 'package:app_money_record/presentation/controller/history/add_history_controller.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
