@@ -11,7 +11,7 @@ $type = $_POST['type'];
 
 $sql = "SELECT * FROM histories
         WHERE 
-        user_id='$user_id' AND date='$date' AND date='$type'";
+        user_id='$user_id' AND type='$date' AND date='$type'";
 
 $result = $connect->query($sql);
 
