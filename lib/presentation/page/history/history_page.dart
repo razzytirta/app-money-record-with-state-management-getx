@@ -30,11 +30,12 @@ class _HistoryPageState extends State<HistoryPage> {
   }
 
   delete(String id) async {
-    var response = await DInfo.dialogConfirmation(
-        context, 'Delete', 'Yakin untuk menghapus ?');
-    if (response != null) {
-      bool success = await HistorySource.delete(id);
-      if (success) {
+    final confirmed = await DInfo.dialogConfirmation(
+        context, 'Delete', 'Yakin untuk menghapus ?',
+        textNo: 'No', textYes: 'Yes');
+    if (confirmed!) {
+      final deletionSuccess = await HistorySource.delete(id);
+      if (deletionSuccess) {
         refresh();
       }
     }

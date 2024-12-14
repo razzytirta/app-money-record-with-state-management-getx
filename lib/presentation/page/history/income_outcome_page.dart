@@ -42,11 +42,12 @@ class _IncomeOutcomePageState extends State<IncomeOutcomePage> {
         },
       );
     } else if (value == 'delete') {
-      var response = await DInfo.dialogConfirmation(
-          context, 'Delete', 'Yakin untuk menghapus ?');
-      if (response != null) {
-        bool success = await HistorySource.delete(history.id!);
-        if (success) {
+      final confirmed = await DInfo.dialogConfirmation(
+          context, 'Delete', 'Yakin untuk menghapus ?',
+          textNo: 'No', textYes: 'Yes');
+      if (confirmed!) {
+        final deletionSuccess = await HistorySource.delete(history.id!);
+        if (deletionSuccess) {
           refresh();
         }
       }

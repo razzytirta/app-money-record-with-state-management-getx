@@ -289,7 +289,7 @@ class HistorySource {
   }
 
   static Future<History?> whereDate(String userId, String date) async {
-    final String url = '${Api.history}/where_date.php';
+    final String url = '${Api.history}/detail.php';
 
     try {
       // Send POST request
