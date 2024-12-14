@@ -1,31 +1,28 @@
 <?php
 include '../connection.php';
-// Set CORS headers
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type, Authorization");
+header("Access-Control-Allow-Headers: Content-Type");
 
-$user_id = $_POST['user_id'];
-$date = $_POST['date'];
-$type = $_POST['type'];
+$email = $_POST['email'];
+$password = md5($_POST['password']);
 
-$sql = "SELECT * FROM histories
-        WHERE 
-        user_id='$user_id' AND date='$date' AND type='$type'";
+$sql = "SELECT * FROM users WHERE email = '$email' AND password ='$password'";
 
 $result = $connect->query($sql);
 
 if ($result->num_rows > 0) {
-    $data = array();
+    $user = array();
     while ($row = $result->fetch_assoc()) {
-        $data[] = $row;
+        $user[] = $row;
     }
+
     echo json_encode(array(
         "success" => true,
-        "data" => $data[0]
-    ));
+        "data" => $user[0]
+    ), JSON_PRETTY_PRINT);
 } else {
     echo json_encode(array(
         "success" => false
-    ));
+    ), JSON_PRETTY_PRINT);
 }

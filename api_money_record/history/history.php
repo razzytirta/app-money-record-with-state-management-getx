@@ -6,13 +6,12 @@ header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
 
 $user_id = $_POST['user_id'];
-$date = $_POST['date'];
-$type = $_POST['type'];
 
-$sql = "SELECT * FROM histories
+$sql = "SELECT id, date, total, type FROM histories 
         WHERE 
-        user_id='$user_id' AND date='$date' AND type='$type'";
-
+        user_id='$user_id'
+        ORDER BY date DESC
+        ";
 $result = $connect->query($sql);
 
 if ($result->num_rows > 0) {
@@ -22,7 +21,7 @@ if ($result->num_rows > 0) {
     }
     echo json_encode(array(
         "success" => true,
-        "data" => $data[0]
+        "data" => $data
     ));
 } else {
     echo json_encode(array(
